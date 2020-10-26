@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.codejudge.sb.dao.api.AppRepository;
 import org.codejudge.sb.entity.Sentiment;
+import org.codejudge.sb.error.CustomException;
 import org.codejudge.sb.model.EvalRequest;
 import org.codejudge.sb.model.ProcStatus;
 import org.codejudge.sb.model.ResultMetadata;
@@ -15,6 +16,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class AppServiceImpl implements AppService {
     private SeleniumService seleniumService;
 
     @Override
-    public Sentiment initiate(EvalRequest request) {
+    public Sentiment initiate(EvalRequest request) throws CustomException {
         log.info("Got request to initiate the sentiment processing for request: {}", request);
         EvalRequest.validate(request);
         Sentiment sentiment = new Sentiment.SentimentBuilder()
@@ -63,7 +65,11 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public Sentiment getSentiments(Integer id) {
-        return appRepo.getById(id);
+    public Sentiment getSentiments(Integer id) throws CustomException {
+        Sentiment sentiment = appRepo.getById(id);
+        if (null == sentiment) {
+            throw new CustomException("No record found!", HttpStatus.NOT_FOUND);
+        }
+        return sentiment;
     }
 }

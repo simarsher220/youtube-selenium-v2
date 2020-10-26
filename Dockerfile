@@ -34,10 +34,22 @@ RUN if [ $workspace = "theia" ] ; then \
 	wget https://codejudge-starter-repo-artifacts.s3.ap-south-1.amazonaws.com/theia/java/run.sh \
     && chmod 775 ./run.sh ; fi
 
-COPY . /tmp/
-WORKDIR /tmp/
+
+WORKDIR /tmp
+
+RUN echo hello
+
+# Install chrome and chromedriver
+RUN wget https://codejudge-starter-repo-artifacts.s3.ap-south-1.amazonaws.com/backend-project/chrome/chrome-setup.sh
+RUN chmod 775 ./chrome-setup.sh
+RUN sh chrome-setup.sh
+
 
 EXPOSE 8080
+
+RUN mkdir /var/app
+WORKDIR /var/app
+COPY . /var/app/
 
 # Build the app
 RUN wget https://codejudge-starter-repo-artifacts.s3.ap-south-1.amazonaws.com/backend-project/springboot/gradle/2.x/build.sh

@@ -38,11 +38,10 @@ public class SeleniumServiceImpl implements SeleniumService {
     @Override
     public  WebDriver getWebDriver() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        System.setProperty("webdriver.chrome.driver", "/Users/simarsi/Downloads/chromedriver");
-        chromeOptions.addArguments("--no-sandbox", "--disable-dev-shm-usage", "--incognito", "--disable-extensions", "--disable-gpu");
-        chromeOptions.addArguments("start-maximized");
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+        chromeOptions.addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage", "--incognito", "--disable-extensions", "--disable-gpu");
 //        chromeOptions.addArguments("window-size=1280,800");
-//        chromeOptions.setExperimentalOption("useAutomationExtension", false);
+        chromeOptions.setExperimentalOption("useAutomationExtension", false);
 //        URL liveRunUrl = new URL("http://localhost:4444/wd/hub");
         return new ChromeDriver(chromeOptions);
     }
