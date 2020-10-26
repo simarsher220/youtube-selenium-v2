@@ -7,6 +7,8 @@ import org.codejudge.sb.error.CustomException;
 import org.codejudge.sb.model.EvalRequest;
 import org.codejudge.sb.serivce.api.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -25,16 +27,16 @@ public class AppController {
 
     @PostMapping("/initiate")
     @ResponseBody
-    public Sentiment initiateProcess(@RequestBody EvalRequest request) throws CustomException {
+    public ResponseEntity<Sentiment> initiateProcess(@RequestBody EvalRequest request) throws CustomException {
         log.info("Got request to initiate the selenium process for request: {}", request);
-        return appService.initiate(request);
+        return new ResponseEntity<>(appService.initiate(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/sentiments")
     @ResponseBody
-    public Sentiment getSentiments(@RequestParam Integer id) throws CustomException{
+    public ResponseEntity<Sentiment> getSentiments(@RequestParam Integer id) throws CustomException{
         log.info("Got request to get the sentiments for selenium process via id: {}", id);
-        return appService.getSentiments(id);
+        return new ResponseEntity<>(appService.getSentiments(id), HttpStatus.OK);
     }
 
 }
