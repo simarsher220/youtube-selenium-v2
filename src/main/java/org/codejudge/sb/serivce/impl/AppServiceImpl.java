@@ -48,7 +48,7 @@ public class AppServiceImpl implements AppService {
             List<WebElement> elements = driver.findElements(By.id("video-title"));
             ResultMetadata results = null;
             try {
-                String url = elements.get(2).getAttribute("href");
+                String url = elements.get(0).getAttribute("href");
                 results = seleniumService.getSentiments(driver, url);
             } catch (InterruptedException e) {
                 e.printStackTrace();
