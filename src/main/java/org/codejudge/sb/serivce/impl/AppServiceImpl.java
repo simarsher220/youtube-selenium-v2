@@ -1,6 +1,8 @@
 package org.codejudge.sb.serivce.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.codejudge.sb.dao.api.AppRepository;
 import org.codejudge.sb.dao.api.AppV2Repository;
 import org.codejudge.sb.entity.Sentiment;
@@ -11,6 +13,7 @@ import org.codejudge.sb.model.ProcStatus;
 import org.codejudge.sb.model.ResultMetadata;
 import org.codejudge.sb.serivce.api.AppService;
 import org.codejudge.sb.serivce.api.SeleniumService;
+import org.codejudge.sb.util.UrlValidationUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -76,21 +79,20 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public SentimentV2 initiateV2(EvalRequest request) throws CustomException {
-        log.info("Got request to initiate the sentiment processing for request: {}", request);
-        EvalRequest.validate(request);
+    public SentimentV2 initiateV2(String url) throws CustomException {
+        log.info("Got request to initiate the sentiment processing for url: {}", url);
+        if (StringUtils.isEmpty(url)) {
+            throw new CustomException("Url can't be empty!", HttpStatus.BAD_REQUEST);
+        }
+        UrlValidationUtil.validate(url);
         WebDriver driver = seleniumService.getWebDriver();
-        driver.get("https://www.youtube.com/results?search_query=" + request.getSearchTitle());
-        List<WebElement> elements = driver.findElements(By.id("video-title"));
         ResultMetadata results = null;
         try {
-            String url = elements.get(0).getAttribute("href");
             results = seleniumService.getSentiments(driver, url);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         SentimentV2 sentiment = new SentimentV2.SentimentBuilderV2()
-                .searchTitle(request.getSearchTitle())
                 .likes(results.getLikes())
                 .dislikes(results.getDisLikes())
                 .videoUrl(results.getVideoLink()).build();

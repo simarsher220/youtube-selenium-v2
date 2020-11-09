@@ -8,5 +8,5 @@ import org.codejudge.sb.model.EvalRequest;
 public interface AppService {
     public Sentiment initiate(EvalRequest request) throws CustomException;
     public Sentiment getSentiments(Integer id) throws CustomException;
-    public SentimentV2 initiateV2(EvalRequest request) throws CustomException;
+    public SentimentV2 initiateV2(String request) throws CustomException;
 }

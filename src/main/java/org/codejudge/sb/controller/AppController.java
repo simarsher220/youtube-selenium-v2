@@ -42,9 +42,9 @@ public class AppController {
 
     @PostMapping("/scrape-sentiments")
     @ResponseBody
-    public ResponseEntity<SentimentV2> initiateProcessV2(@RequestBody EvalRequest request) throws CustomException {
-        log.info("Got request to initiate the selenium process for request: {}", request);
-        return new ResponseEntity<>(appService.initiateV2(request), HttpStatus.CREATED);
+    public ResponseEntity<SentimentV2> initiateProcessV2(@RequestParam String url) throws CustomException {
+        log.info("Got request to initiate the selenium process for url: {}", url);
+        return new ResponseEntity<>(appService.initiateV2(url), HttpStatus.CREATED);
     }
 
 }
