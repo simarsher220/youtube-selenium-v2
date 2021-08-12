@@ -14,10 +14,16 @@ public class ResultMetadata {
     private String videoLink;
     private Integer likes;
     private Integer disLikes;
+    private Integer comments;
 
     public ResultMetadata(String videoLink, Integer likes, Integer disLikes) {
         this.videoLink = videoLink;
         this.likes = likes;
         this.disLikes = disLikes;
+    }
+
+    public ResultMetadata(String videoLink, Integer comments) {
+        this.videoLink = videoLink;
+        this.comments = comments;
     }
 }
